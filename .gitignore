@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+venv/
+.venv/
+env/
+myenv/
+.env
+*.db
+
+# Node
+node_modules/
+.next/
+out/
+.vercel/
+*.tsbuildinfo
+
+# Data
+data/chromadb/
+data/exports/
+data/tickets/*
+!data/tickets/.gitkeep
+data/documents/*
+!data/documents/.gitkeep
+data/synthetic/*
+!data/synthetic/.gitkeep
+backend/data/*
+!backend/data/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets (keep .env.example)
+.env.local
+.env.production

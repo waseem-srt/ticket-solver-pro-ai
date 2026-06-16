@@ -1,0 +1,97 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(0.09 0.01 25);
+  --foreground: oklch(0.96 0.005 25);
+  --card: oklch(0.12 0.015 25);
+  --card-foreground: oklch(0.96 0.005 25);
+  --popover: oklch(0.12 0.015 25);
+  --popover-foreground: oklch(0.96 0.005 25);
+  --primary: oklch(0.58 0.23 25);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.18 0.02 25);
+  --secondary-foreground: oklch(0.96 0.005 25);
+  --muted: oklch(0.18 0.02 25);
+  --muted-foreground: oklch(0.6 0.01 25);
+  --accent: oklch(0.65 0.21 40);
+  --accent-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.22 0.02 25);
+  --input: oklch(0.18 0.02 25);
+  --ring: oklch(0.58 0.23 25);
+  --radius: 0.75rem;
+
+  /* Custom gradient colors */
+  --gradient-from: oklch(0.58 0.23 25);
+  --gradient-to: oklch(0.65 0.21 40);
+}
+
+* {
+  border-color: var(--border);
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: oklch(0.3 0.02 25); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: oklch(0.4 0.02 25); }
+
+/* Glassmorphism card */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, oklch(0.68 0.23 25), oklch(0.75 0.21 40));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Pulsing dot animation */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.pulse-dot {
+  animation: pulse-dot 1.2s ease-in-out infinite;
+}
+
+/* Typing cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.typing-cursor::after {
+  content: "▋";
+  animation: blink 0.8s step-end infinite;
+  color: oklch(0.58 0.23 25);
+}
+
+/* Message fade-in */
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.msg-animate { animation: msg-in 0.2s ease-out forwards; }
+
+/* Sidebar slide */
+@keyframes slide-in {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}

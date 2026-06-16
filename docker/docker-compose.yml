@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ticket_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ticketuser
+      POSTGRES_PASSWORD: ticketpass
+      POSTGRES_DB: ticketdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ticketuser -d ticketdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.backend
+    container_name: ticket_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://ticketuser:ticketpass@postgres:5432/ticketdb
+      DATABASE_URL_SYNC: postgresql://ticketuser:ticketpass@postgres:5432/ticketdb
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-super-secret-change-in-production-32chars}
+      JWT_ALGORITHM: HS256
+      HF_TOKEN: ${HF_TOKEN}
+      HF_MODEL_REPO: unsloth/Llama-3.1-8B-Instruct
+      CHROMA_PERSIST_DIR: /app/data/chromadb
+      CORS_ORIGINS: http://localhost:3000
+    volumes:
+      - chroma_data:/app/data/chromadb
+      - ticket_data:/app/data/tickets
+      - document_data:/app/data/documents
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    container_name: ticket_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  chroma_data:
+  ticket_data:
+  document_data:
